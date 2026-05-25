@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess & Checkers • Play vs AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23252529' stroke='%236d9b3a' stroke-width='6'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='%23e8e6e3'%3E♟%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="app">
+    <div class="board-section">
+        <!-- Feature 2: AI/Player 2 score bar ABOVE the board -->
+        <div class="score-bar" id="scoreBarTop">
+            <div class="sb-label" id="sbLabelTop">AI (Black)</div>
+            <div class="sb-caps" id="sbCapsTop"></div>
+            <div class="sb-score" id="sbScoreTop">+0</div>
+        </div>
+        <div class="board-container">
+            <div class="coords" id="ct"></div>
+            <div style="display:flex">
+                <div class="coords" style="flex-direction:column;justify-content:space-around;width:16px" id="cl"></div>
+                <div class="board" id="board"></div>
+                <div class="coords" style="flex-direction:column;justify-content:space-around;width:16px" id="cr"></div>
+            </div>
+            <div class="coords" id="cb"></div>
+        </div>
+        <!-- Feature 2: Player 1 score bar BELOW the board -->
+        <div class="score-bar" id="scoreBarBot">
+            <div class="sb-label" id="sbLabelBot">Player (White)</div>
+            <div class="sb-caps" id="sbCapsBot"></div>
+            <div class="sb-score" id="sbScoreBot">+0</div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="game-header">
+            <h2 id="gameTitle">♟️ Chess</h2>
+            <div class="mode-sel">
+                <button id="bChess" class="active"><span class="btn-icon">♟️</span> Chess</button>
+                <button id="bCheck"><span class="btn-icon">🔴</span> Check</button>
+            </div>
+        </div>
+        <div class="mode-sel">
+            <button id="b2p" class="active"><span class="btn-icon">👥</span> 2 Players</button>
+            <button id="bAI"><span class="btn-icon">🤖</span> vs AI</button>
+        </div>
+        <div class="players-card" id="playersCard">
+            <div class="player-avatar">
+                <div class="avatar-img white-player" id="avatarLeft">♙</div>
+                <span class="avatar-name" id="nameLeft">Player 1</span>
+            </div>
+            <span class="avatar-vs">VS</span>
+            <div class="player-avatar">
+                <div class="avatar-img black-player" id="avatarRight">♟</div>
+                <span class="avatar-name" id="nameRight">Player 2</span>
+            </div>
+        </div>
+        <div class="diff-row" id="diffBox" style="display:none">
+            <label>🎯 AI Level</label>
+            <select id="diffSel">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+                <option value="medium" selected>Candidate Master</option>
+                <option value="hard">Grand Master</option>
+            </select>
+        </div>
+        <div class="info-card">
+            <span id="badge" class="turn-badge tw">White's turn</span>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--text2)">
+                <span>Move</span><span id="mc">0</span>
+            </div>
+            <div class="draw-info" id="drawInfo"></div>
+        </div>
+        <div>
+            <small style="color:var(--text2);text-transform:uppercase;letter-spacing:1px">Captured</small>
+            <div class="captured-row" id="capRow"></div>
+        </div>
+        <div class="btn-row">
+            <button class="btn primary" id="bNew">New Game</button>
+            <button class="btn" id="bFlip">🔄 Flip</button>
+        </div>
+        <button class="btn" id="bUndo">Undo</button>
+    </div>
+    <!-- FIX 2: Third column — move log lives here -->
+    <div class="move-log-column">
+        <h3>📋 Moves</h3>
+        <div class="mlog-header">
+            <span id="mlogHdr1">White</span>
+            <span id="mlogHdr2">AI (Black)</span>
+        </div>
+        <div class="move-list" id="mlog" style="padding:4px;flex:1;max-height:none;overflow-y:auto">
+            <div class="mlog-grid" id="mlogGrid"></div>
+        </div>
+    </div>
+</div>
+<footer>Chess & Checkers • Play vs AI</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
