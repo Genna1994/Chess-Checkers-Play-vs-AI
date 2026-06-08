@@ -10,7 +10,6 @@
 <body>
 <div class="app">
     <div class="board-section">
-        <!-- Feature 2: AI/Player 2 score bar ABOVE the board -->
         <div class="score-bar" id="scoreBarTop">
             <div class="sb-label" id="sbLabelTop">AI (Black)</div>
             <div class="sb-caps" id="sbCapsTop"></div>
@@ -18,14 +17,13 @@
         </div>
         <div class="board-container">
             <div class="coords" id="ct"></div>
-            <div style="display:flex">
-                <div class="coords" style="flex-direction:column;justify-content:space-around;width:16px" id="cl"></div>
+            <div class="board-inner">
+                <div class="coords coords-side" id="cl"></div>
                 <div class="board" id="board"></div>
-                <div class="coords" style="flex-direction:column;justify-content:space-around;width:16px" id="cr"></div>
+                <div class="coords coords-side" id="cr"></div>
             </div>
             <div class="coords" id="cb"></div>
         </div>
-        <!-- Feature 2: Player 1 score bar BELOW the board -->
         <div class="score-bar" id="scoreBarBot">
             <div class="sb-label" id="sbLabelBot">Player (White)</div>
             <div class="sb-caps" id="sbCapsBot"></div>
@@ -82,7 +80,6 @@
         </div>
         <button class="btn" id="bUndo">Undo</button>
     </div>
-    <!-- FIX 2: Third column — move log lives here -->
     <div class="move-log-column">
         <h3>📋 Moves</h3>
         <div class="mlog-header">
@@ -95,7 +92,6 @@
     </div>
 </div>
 <footer>Chess & Checkers • Play vs AI</footer>
-
 <script src="script.js"></script>
 </body>
 </html>
