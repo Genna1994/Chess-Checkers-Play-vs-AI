@@ -1,4 +1,4 @@
-        :root {
+:root {
             --bg: #1b1b1f;
             --surface: #252529;
             --surface2: #2e2e35;
@@ -15,7 +15,6 @@
         }
         #board.checkers .square.dark  { background: #4a7a59 !important; }
         #board.checkers .square.light { background: #c8dfc8 !important; }
-        /* FIX 3: Last-move trail — must beat checkers color !important rules */
         #board.checkers .square.last-from,
         #board.checkers .square.last-to,
         #board.chess .square.last-from,
@@ -27,7 +26,15 @@
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; padding: 20px; color: var(--text); user-select: none;
         }
-        .app { display:flex; flex-wrap:nowrap; gap:20px; justify-content:center; align-items:flex-start; max-width:1260px; width:100%; }
+        .app {
+            display: flex;
+            flex-wrap: nowrap;        /* desktop: 3 columns side by side */
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1260px;
+            width: 100%;
+        }
         .board-section { display:flex; flex-direction:column; align-items:center; gap:6px; }
         .board-container {
             background: var(--surface); border-radius:16px; padding:14px;
@@ -37,7 +44,6 @@
             display:grid; grid-template-columns:repeat(8,1fr); grid-template-rows:repeat(8,1fr);
             width:min(480px,80vw); height:min(480px,80vw); border-radius:4px; overflow:hidden;
         }
-        /* Flipped board: squares rendered in reverse visual order */
         .board.flipped { transform: rotate(180deg); }
         .board.flipped .square { transform: rotate(180deg); }
         .square {
@@ -49,7 +55,6 @@
         .square:hover { filter:brightness(.88); }
         .square.selected { box-shadow:inset 0 0 0 4px var(--selected); animation:pulse-sel 1.2s infinite; }
         @keyframes pulse-sel { 0%,100%{box-shadow:inset 0 0 0 4px var(--selected)}50%{box-shadow:inset 0 0 0 6px var(--selected)} }
-        /* Feature 4: Checkers (and chess) movement trail highlight — both from and to squares */
         .square.last-from { background:rgba(246,246,105,0.5) !important; }
         .square.last-to   { background:rgba(246,246,105,0.5) !important; }
         .square.valid-move::after {
@@ -59,7 +64,6 @@
         .square.valid-capture { box-shadow:inset 0 0 0 4px var(--valid-capture-ring); }
         .square.in-check { animation:chk 0.7s infinite; }
         @keyframes chk { 0%,100%{box-shadow:inset 0 0 0 4px #f44}50%{box-shadow:inset 0 0 0 8px #f00} }
-        /* Must-jump highlight for checkers */
         .square.must-jump-piece { outline: 3px solid #ffd700; outline-offset: -3px; animation: jump-pulse 0.9s infinite; }
         @keyframes jump-pulse { 0%,100%{outline-color:#ffd700;outline-width:3px}50%{outline-color:#ff9500;outline-width:5px} }
         .piece {
@@ -172,14 +176,8 @@
             font-size:.75rem; text-transform:uppercase; letter-spacing:1px;
             color:var(--text2); margin-bottom:2px;
         }
-        @media(max-width:900px) {
-            .app { flex-wrap:wrap; }
-            .panel { width:100%; max-width:520px; }
-            .move-log-column { width:100%; max-width:520px; min-width:unset; }
-        }
 
-        /* ── Feature 2: Score panels above/below board ── */
-        .board-section { display:flex; flex-direction:column; align-items:center; gap:6px; }
+        /* ── Score panels above/below board ── */
         .score-bar {
             width: 100%;
             display: flex;
@@ -216,7 +214,7 @@
             text-align: right;
         }
 
-        /* ── Feature 2: Two-column move log ── */
+        /* ── Two-column move log ── */
         .mlog-header {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -253,44 +251,158 @@
         .mlog-cell.p2c { border-left: 2px solid #555; }
         .mlog-cell.ai-c { border-left: 2px solid var(--accent); }
 
-        /* ===== MOBILE FIX ===== */
+        /* =================================================
+           TABLET  (601px – 900px)
+           Layout: board centred, panel + log go below
+           ================================================= */
+        @media (max-width: 900px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;   /* don't try to centre vertically on short tablets */
+            }
 
-        /* Make the board scale to fit screen width */
-        #board-container, .board-wrapper, canvas, #chessboard {
-          max-width: 100% !important;
-          width: min(100vw, 520px) !important;
-          height: auto !important;
-          box-sizing: border-box;
-                }
+            .app {
+                flex-wrap: wrap;           /* let columns drop below */
+                gap: 14px;
+                justify-content: center;
+            }
 
-        /* Stop the layout from going side-by-side on small screens */
-        .game-layout, .main-layout, .container {
-          flex-direction: column !important;
-          align-items: center !important;
-          padding: 8px !important;
-                }
+            /* Board section stays full width, centred */
+            .board-section {
+                width: 100%;
+                max-width: 560px;
+                margin: 0 auto;
+            }
 
-        /* Score panels (AI Black / Player White) go above/below, not beside */
-        .score-panel, .player-info, .side-panel {
-          width: 100% !important;
-          max-width: 520px !important;
-                }
+            /* Board scales to available space */
+            .board {
+                width: min(500px, 86vw);
+                height: min(500px, 86vw);
+            }
 
-        @media (max-width: 600px) {
-          body {
-            overflow-x: hidden;
-                  }
+            /* Piece font scales with board */
+            .square,
+            .piece { font-size: min(48px, 10.5vw); }
 
-          /* Shrink any fixed-size board */
-          canvas, svg, table.board {
-            width: 100% !important;
-            height: auto !important;
-            max-width: 100vw !important;
-                  }
+            /* Panel and log side by side below the board */
+            .panel {
+                width: calc(50% - 7px);
+                min-width: 220px;
+                max-width: 340px;
+            }
 
-          .sidebar, .panel {
-             width: 100% !important;
-            float: none !important;
-          }
+            .move-log-column {
+                width: calc(50% - 7px);
+                min-width: 200px;
+                max-width: 340px;
+                align-self: auto;
+            }
         }
-    
+
+        /* =================================================
+           MOBILE  (≤ 600px)
+           Layout: single column, everything stacked
+           ================================================= */
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+                align-items: flex-start;
+            }
+
+            .app {
+                flex-direction: column;    /* single column */
+                flex-wrap: nowrap;
+                align-items: center;
+                gap: 10px;
+            }
+
+            /* Board section fills the screen width */
+            .board-section {
+                width: 100%;
+            }
+
+            /* Board: fill viewport minus body padding (16px total) */
+            .board {
+                width: calc(100vw - 68px);  /* 8px body pad × 2 + 14px board-container pad × 2 + 4px coords */
+                height: calc(100vw - 68px);
+            }
+
+            /* Scale pieces with the smaller board */
+            .square,
+            .piece { font-size: min(40px, 10.5vw); }
+
+            /* Score bars match board width */
+            .score-bar {
+                width: 100%;
+                padding: 6px 10px;
+            }
+
+            /* Board container snug padding on mobile */
+            .board-container {
+                padding: 10px;
+                border-radius: 12px;
+            }
+
+            /* Panel full width */
+            .panel {
+                width: 100%;
+                max-width: 100%;
+                min-width: unset;
+                border-radius: 12px;
+                padding: 14px;
+                gap: 10px;
+            }
+
+            /* Move log full width, fixed height so it doesn't grow forever */
+            .move-log-column {
+                width: 100%;
+                max-width: 100%;
+                min-width: unset;
+                border-radius: 12px;
+                padding: 14px;
+                align-self: auto;
+            }
+
+            .move-list,
+            #mlog {
+                max-height: 140px;
+            }
+
+            /* Tighten up buttons on small screens */
+            .btn { padding: 9px 12px; font-size: .8rem; }
+
+            /* Game header: keep title + mode selector from overflowing */
+            .game-header {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            /* Mode selector full width on very small screens */
+            .mode-sel { flex: 1; min-width: 0; }
+            .mode-sel button { padding: 7px 8px; font-size: .75rem; }
+
+            /* Shrink avatar images slightly */
+            .avatar-img { width: 38px; height: 38px; font-size: 1.3rem; }
+
+            /* Prevent horizontal scroll */
+            html, body { overflow-x: hidden; }
+        }
+
+        /* =================================================
+           VERY SMALL PHONES  (≤ 380px — e.g. iPhone SE)
+           ================================================= */
+        @media (max-width: 380px) {
+            body { padding: 6px; }
+
+            .board {
+                width: calc(100vw - 56px);
+                height: calc(100vw - 56px);
+            }
+
+            .square,
+            .piece { font-size: min(36px, 10vw); }
+
+            .panel, .move-log-column { padding: 10px; }
+
+            .game-header h2 { font-size: 1.1rem; }
+        }
