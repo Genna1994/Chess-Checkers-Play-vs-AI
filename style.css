@@ -13,172 +13,55 @@
             --valid-capture-ring: #e5383b;
             --board-border: #3b3b42;
         }
+
         #board.checkers .square.dark  { background: #4a7a59 !important; }
         #board.checkers .square.light { background: #c8dfc8 !important; }
         #board.checkers .square.last-from,
         #board.checkers .square.last-to,
         #board.chess .square.last-from,
         #board.chess .square.last-to { background: rgba(246,246,105,0.5) !important; }
+
         * { margin:0; padding:0; box-sizing:border-box; }
+
+        html, body { overflow-x: hidden; }
+
         body {
             background: var(--bg);
             font-family: 'Segoe UI', system-ui, sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; padding: 20px; color: var(--text); user-select: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+            user-select: none;
         }
+
+        /* ── 3-column desktop layout ── */
         .app {
             display: flex;
-            flex-wrap: nowrap;        /* desktop: 3 columns side by side */
+            flex-wrap: nowrap;
             gap: 20px;
             justify-content: center;
             align-items: flex-start;
             max-width: 1260px;
             width: 100%;
         }
-        .board-section { display:flex; flex-direction:column; align-items:center; gap:6px; }
-        .board-container {
-            background: var(--surface); border-radius:16px; padding:14px;
-            box-shadow: 0 12px 30px rgba(0,0,0,.5); border:1px solid var(--board-border);
-        }
-        .board {
-            display:grid; grid-template-columns:repeat(8,1fr); grid-template-rows:repeat(8,1fr);
-            width:min(480px,80vw); height:min(480px,80vw); border-radius:4px; overflow:hidden;
-        }
-        .board.flipped { transform: rotate(180deg); }
-        .board.flipped .square { transform: rotate(180deg); }
-        .square {
-            display:flex; align-items:center; justify-content:center;
-            position:relative; cursor:pointer; font-size:min(48px,7vw);
-        }
-        .square.light { background:var(--light-square); }
-        .square.dark  { background:var(--dark-square); }
-        .square:hover { filter:brightness(.88); }
-        .square.selected { box-shadow:inset 0 0 0 4px var(--selected); animation:pulse-sel 1.2s infinite; }
-        @keyframes pulse-sel { 0%,100%{box-shadow:inset 0 0 0 4px var(--selected)}50%{box-shadow:inset 0 0 0 6px var(--selected)} }
-        .square.last-from { background:rgba(246,246,105,0.5) !important; }
-        .square.last-to   { background:rgba(246,246,105,0.5) !important; }
-        .square.valid-move::after {
-            content:''; position:absolute; width:28%; height:28%;
-            background:var(--valid-move-dot); border-radius:50%;
-        }
-        .square.valid-capture { box-shadow:inset 0 0 0 4px var(--valid-capture-ring); }
-        .square.in-check { animation:chk 0.7s infinite; }
-        @keyframes chk { 0%,100%{box-shadow:inset 0 0 0 4px #f44}50%{box-shadow:inset 0 0 0 8px #f00} }
-        .square.must-jump-piece { outline: 3px solid #ffd700; outline-offset: -3px; animation: jump-pulse 0.9s infinite; }
-        @keyframes jump-pulse { 0%,100%{outline-color:#ffd700;outline-width:3px}50%{outline-color:#ff9500;outline-width:5px} }
-        .piece {
-            pointer-events:none; z-index:2; line-height:1;
-            font-size: min(46px, 7vw);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .piece.white {
-            color: #f8f8f8;
-            text-shadow:
-                -2px -2px 0 #2a2a2a,  2px -2px 0 #2a2a2a,
-                -2px  2px 0 #2a2a2a,  2px  2px 0 #2a2a2a,
-                 0px  0px 0 #2a2a2a,  0    3px  8px rgba(0,0,0,0.8);
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
-        }
-        .piece.black {
-            color: #2c2c2c;
-            text-shadow:
-                -1.5px -1.5px 0 #d8d8d8,  1.5px -1.5px 0 #d8d8d8,
-                -1.5px  1.5px 0 #d8d8d8,  1.5px  1.5px 0 #d8d8d8,
-                 0      0px   0 #d8d8d8,  0      2px   5px rgba(0,0,0,0.6);
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
-        }
-        .checker-piece {
-            width:70%; height:70%; border-radius:50%; position:relative;
-        }
-        .checker-piece.red {
-            background:radial-gradient(circle at 35% 35%,#ff6b6b,#c0392b);
-            border:2px solid #a93226; box-shadow:0 3px 6px rgba(0,0,0,.4);
-        }
-        .checker-piece.black {
-            background:radial-gradient(circle at 35% 35%,#555,#1a1a1a);
-            border:2px solid #000; box-shadow:0 3px 6px rgba(0,0,0,.5);
-        }
-        .checker-piece.king::after {
-            content:'♛'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-            font-size:60%; color:#ffd700; text-shadow:0 0 6px #ffd700;
-        }
-        .coords { display:flex; justify-content:space-between; padding:0 4px; font-size:.7rem; color:var(--text2); width:100%; }
-        .panel {
-            background:var(--surface); border-radius:16px; padding:20px; border:1px solid var(--board-border);
-            box-shadow:0 12px 30px rgba(0,0,0,.5); display:flex; flex-direction:column; gap:14px; width:270px; max-width:100%;
-        }
-        .game-header { display:flex; justify-content:space-between; align-items:center; }
-        .game-header h2 {
-            font-size:1.3rem; font-weight:600;
-            background:linear-gradient(135deg,#f0d9b5,#7eb44a);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-        }
-        .mode-sel { display:flex; gap:4px; background:var(--surface2); border-radius:8px; padding:3px; }
-        .mode-sel button {
-            flex:1; padding:8px 12px; border:none; border-radius:6px; background:transparent;
-            color:var(--text2); cursor:pointer; font-weight:600; font-size:.8rem; transition:.2s;
-        }
-        .mode-sel button.active { background:var(--accent); color:#fff; }
-        .diff-row { display:flex; flex-direction:column; gap:6px; }
-        .diff-row label { font-size:.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--text2); }
-        select { background:var(--surface2); border:1px solid #444; color:#fff; padding:10px; border-radius:8px; font-weight:500; cursor:pointer; width:100%; }
-        .info-card { background:var(--surface2); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:4px; }
-        .turn-badge {
-            font-weight:600; padding:6px 12px; border-radius:20px; text-align:center;
-            font-size:.8rem; letter-spacing:.5px; transition:.3s;
-        }
-        .tw { background:#fff; color:#333; }
-        .tb { background:#333; color:#eee; }
-        .tr { background:#e94560; color:#fff; }
-        @keyframes blink { 0%,100%{opacity:1}50%{opacity:.4} }
-        .thinking { animation:blink 1s infinite; color:var(--accent); font-weight:600; }
-        .captured-row { display:flex; flex-wrap:wrap; gap:4px; min-height:24px; font-size:1.2rem; }
-        .btn {
-            background:var(--surface2); border:1px solid #444; color:#fff; padding:10px 16px;
-            border-radius:8px; cursor:pointer; font-weight:600; font-size:.85rem; transition:.2s; text-align:center;
-        }
-        .btn:hover { background:var(--accent); border-color:var(--accent); }
-        .btn.primary { background:var(--accent); border-color:var(--accent); }
-        .btn.primary:hover { background:var(--accent-hover); }
-        .btn-row { display:flex; gap:8px; }
-        .btn-row .btn { flex:1; }
-        .move-list {
-            max-height:160px; overflow-y:auto; font-family:'Consolas',monospace; font-size:.75rem;
-            color:#aaa; background:var(--surface2); border-radius:8px; padding:8px;
-        }
-        .move-list span { padding:2px 4px; display:inline-block; }
-        .mn { color:#777; margin-right:4px; }
-        footer { text-align:center; color:#555; font-size:.7rem; letter-spacing:1px; margin-top:8px; }
-        .btn-icon { font-size:1rem; }
-        .players-card {
-            display:flex; justify-content:space-between; align-items:center;
-            background:var(--surface2); border-radius:10px; padding:10px 12px; gap:8px;
-        }
-        .player-avatar { display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; }
-        .avatar-img {
-            width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-            font-size:1.6rem; border:2px solid #444; background:var(--bg);
-        }
-        .avatar-img.white-player { border-color:#e8e8e8; background:#b58863; color:#fff; text-shadow:-1.5px -1.5px 0 #222,1.5px -1.5px 0 #222,-1.5px 1.5px 0 #222,1.5px 1.5px 0 #222; }
-        .avatar-img.black-player { border-color:#666; background:#3a3a3a; color:#111; text-shadow:-1px -1px 0 #ccc,1px -1px 0 #ccc,-1px 1px 0 #ccc,1px 1px 0 #ccc; }
-        .avatar-img.ai-player    { border-color:var(--accent); background:rgba(109,155,58,0.15); }
-        .avatar-name { font-size:.68rem; color:var(--text2); font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
-        .avatar-vs { font-size:.85rem; font-weight:700; color:var(--text2); flex-shrink:0; }
-        .draw-info { font-size:.72rem; color:var(--text2); text-align:center; padding:2px 0; min-height:1em; }
-        .move-log-column {
-            background: var(--surface); border-radius:16px; padding:20px;
-            border:1px solid var(--board-border); box-shadow:0 12px 30px rgba(0,0,0,.5);
-            display:flex; flex-direction:column; gap:10px;
-            width:260px; min-width:220px; max-width:300px;
-            align-self: stretch;
-        }
-        .move-log-column h3 {
-            font-size:.75rem; text-transform:uppercase; letter-spacing:1px;
-            color:var(--text2); margin-bottom:2px;
+
+        /* ── Board section: column for score-bar / board-container / score-bar ── */
+        .board-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            /* Width matches board + padding + border exactly so score bars align */
+            width: fit-content;
+            flex-shrink: 0;
         }
 
-        /* ── Score panels above/below board ── */
+        /* Score bars are tied to board width */
         .score-bar {
+            /* Same width as board-container below */
             width: 100%;
             display: flex;
             align-items: center;
@@ -189,220 +72,307 @@
             font-size: .8rem;
             min-height: 40px;
         }
-        .score-bar .sb-label {
-            font-weight: 700;
-            font-size: .75rem;
-            letter-spacing: .5px;
-            color: var(--text2);
-            white-space: nowrap;
-            min-width: 56px;
-        }
-        .score-bar .sb-caps {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
-            flex: 1;
-            min-height: 20px;
-            align-items: center;
-        }
-        .score-bar .sb-score {
-            font-size: .78rem;
-            font-weight: 600;
-            color: var(--accent);
-            white-space: nowrap;
-            min-width: 32px;
-            text-align: right;
+
+        .board-container {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,.5);
+            border: 1px solid var(--board-border);
         }
 
-        /* ── Two-column move log ── */
-        .mlog-header {
+        /* Desktop board size */
+        .board {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3px;
-            margin-bottom: 4px;
+            grid-template-columns: repeat(8,1fr);
+            grid-template-rows: repeat(8,1fr);
+            width: min(480px, 75vw);
+            height: min(480px, 75vw);
+            border-radius: 4px;
+            overflow: hidden;
         }
+
+        .board.flipped { transform: rotate(180deg); }
+        .board.flipped .square { transform: rotate(180deg); }
+
+        .square {
+            display: flex; align-items: center; justify-content: center;
+            position: relative; cursor: pointer; font-size: min(48px,7vw);
+        }
+        .square.light { background: var(--light-square); }
+        .square.dark  { background: var(--dark-square); }
+        .square:hover { filter: brightness(.88); }
+        .square.selected { box-shadow: inset 0 0 0 4px var(--selected); animation: pulse-sel 1.2s infinite; }
+        @keyframes pulse-sel { 0%,100%{box-shadow:inset 0 0 0 4px var(--selected)}50%{box-shadow:inset 0 0 0 6px var(--selected)} }
+        .square.last-from { background: rgba(246,246,105,0.5) !important; }
+        .square.last-to   { background: rgba(246,246,105,0.5) !important; }
+        .square.valid-move::after {
+            content: ''; position: absolute; width: 28%; height: 28%;
+            background: var(--valid-move-dot); border-radius: 50%;
+        }
+        .square.valid-capture { box-shadow: inset 0 0 0 4px var(--valid-capture-ring); }
+        .square.in-check { animation: chk 0.7s infinite; }
+        @keyframes chk { 0%,100%{box-shadow:inset 0 0 0 4px #f44}50%{box-shadow:inset 0 0 0 8px #f00} }
+        .square.must-jump-piece { outline: 3px solid #ffd700; outline-offset: -3px; animation: jump-pulse 0.9s infinite; }
+        @keyframes jump-pulse { 0%,100%{outline-color:#ffd700;outline-width:3px}50%{outline-color:#ff9500;outline-width:5px} }
+
+        .piece {
+            pointer-events: none; z-index: 2; line-height: 1;
+            font-size: min(46px, 7vw);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .piece.white {
+            color: #f8f8f8;
+            text-shadow:
+                -2px -2px 0 #2a2a2a, 2px -2px 0 #2a2a2a,
+                -2px  2px 0 #2a2a2a, 2px  2px 0 #2a2a2a,
+                0px   0px 0 #2a2a2a, 0    3px  8px rgba(0,0,0,0.8);
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+        }
+        .piece.black {
+            color: #2c2c2c;
+            text-shadow:
+                -1.5px -1.5px 0 #d8d8d8, 1.5px -1.5px 0 #d8d8d8,
+                -1.5px  1.5px 0 #d8d8d8, 1.5px  1.5px 0 #d8d8d8,
+                0       0px   0 #d8d8d8, 0      2px   5px rgba(0,0,0,0.6);
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+        }
+
+        .checker-piece { width: 70%; height: 70%; border-radius: 50%; position: relative; }
+        .checker-piece.red {
+            background: radial-gradient(circle at 35% 35%,#ff6b6b,#c0392b);
+            border: 2px solid #a93226; box-shadow: 0 3px 6px rgba(0,0,0,.4);
+        }
+        .checker-piece.black {
+            background: radial-gradient(circle at 35% 35%,#555,#1a1a1a);
+            border: 2px solid #000; box-shadow: 0 3px 6px rgba(0,0,0,.5);
+        }
+        .checker-piece.king::after {
+            content: '♛'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            font-size: 60%; color: #ffd700; text-shadow: 0 0 6px #ffd700;
+        }
+
+        .coords { display: flex; justify-content: space-between; padding: 0 4px; font-size: .7rem; color: var(--text2); width: 100%; }
+
+        /* ── SIDE PANEL ── */
+        .panel {
+            background: var(--surface); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--board-border);
+            box-shadow: 0 12px 30px rgba(0,0,0,.5);
+            display: flex; flex-direction: column; gap: 14px;
+            width: 270px; max-width: 100%;
+        }
+        .game-header { display: flex; justify-content: space-between; align-items: center; }
+        .game-header h2 {
+            font-size: 1.3rem; font-weight: 600;
+            background: linear-gradient(135deg,#f0d9b5,#7eb44a);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .mode-sel { display: flex; gap: 4px; background: var(--surface2); border-radius: 8px; padding: 3px; }
+        .mode-sel button {
+            flex: 1; padding: 8px 12px; border: none; border-radius: 6px; background: transparent;
+            color: var(--text2); cursor: pointer; font-weight: 600; font-size: .8rem; transition: .2s;
+        }
+        .mode-sel button.active { background: var(--accent); color: #fff; }
+        .diff-row { display: flex; flex-direction: column; gap: 6px; }
+        .diff-row label { font-size: .75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); }
+        select { background: var(--surface2); border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; font-weight: 500; cursor: pointer; width: 100%; }
+        .info-card { background: var(--surface2); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+        .turn-badge {
+            font-weight: 600; padding: 6px 12px; border-radius: 20px; text-align: center;
+            font-size: .8rem; letter-spacing: .5px; transition: .3s;
+        }
+        .tw { background: #fff; color: #333; }
+        .tb { background: #333; color: #eee; }
+        .tr { background: #e94560; color: #fff; }
+        @keyframes blink { 0%,100%{opacity:1}50%{opacity:.4} }
+        .thinking { animation: blink 1s infinite; color: var(--accent); font-weight: 600; }
+        .captured-row { display: flex; flex-wrap: wrap; gap: 4px; min-height: 24px; font-size: 1.2rem; }
+        .btn {
+            background: var(--surface2); border: 1px solid #444; color: #fff; padding: 10px 16px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-size: .85rem; transition: .2s; text-align: center;
+        }
+        .btn:hover { background: var(--accent); border-color: var(--accent); }
+        .btn.primary { background: var(--accent); border-color: var(--accent); }
+        .btn.primary:hover { background: var(--accent-hover); }
+        .btn-row { display: flex; gap: 8px; }
+        .btn-row .btn { flex: 1; }
+        .move-list {
+            max-height: 160px; overflow-y: auto; font-family: 'Consolas',monospace; font-size: .75rem;
+            color: #aaa; background: var(--surface2); border-radius: 8px; padding: 8px;
+        }
+        .move-list span { padding: 2px 4px; display: inline-block; }
+        .mn { color: #777; margin-right: 4px; }
+        footer { text-align: center; color: #555; font-size: .7rem; letter-spacing: 1px; margin-top: 8px; }
+        .btn-icon { font-size: 1rem; }
+        .players-card {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--surface2); border-radius: 10px; padding: 10px 12px; gap: 8px;
+        }
+        .player-avatar { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .avatar-img {
+            width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; border: 2px solid #444; background: var(--bg);
+        }
+        .avatar-img.white-player { border-color:#e8e8e8; background:#b58863; color:#fff; text-shadow:-1.5px -1.5px 0 #222,1.5px -1.5px 0 #222,-1.5px 1.5px 0 #222,1.5px 1.5px 0 #222; }
+        .avatar-img.black-player { border-color:#666; background:#3a3a3a; color:#111; text-shadow:-1px -1px 0 #ccc,1px -1px 0 #ccc,-1px 1px 0 #ccc,1px 1px 0 #ccc; }
+        .avatar-img.ai-player    { border-color: var(--accent); background: rgba(109,155,58,0.15); }
+        .avatar-name { font-size: .68rem; color: var(--text2); font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
+        .avatar-vs { font-size: .85rem; font-weight: 700; color: var(--text2); flex-shrink: 0; }
+        .draw-info { font-size: .72rem; color: var(--text2); text-align: center; padding: 2px 0; min-height: 1em; }
+
+        /* ── MOVE LOG COLUMN ── */
+        .move-log-column {
+            background: var(--surface); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--board-border); box-shadow: 0 12px 30px rgba(0,0,0,.5);
+            display: flex; flex-direction: column; gap: 10px;
+            width: 260px; min-width: 220px; max-width: 300px;
+            align-self: stretch;
+        }
+        .move-log-column h3 {
+            font-size: .75rem; text-transform: uppercase; letter-spacing: 1px;
+            color: var(--text2); margin-bottom: 2px;
+        }
+
+        /* ── SCORE BAR INTERNALS ── */
+        .score-bar .sb-label {
+            font-weight: 700; font-size: .75rem; letter-spacing: .5px;
+            color: var(--text2); white-space: nowrap; min-width: 56px;
+        }
+        .score-bar .sb-caps {
+            display: flex; flex-wrap: wrap; gap: 2px;
+            flex: 1; min-height: 20px; align-items: center;
+        }
+        .score-bar .sb-score {
+            font-size: .78rem; font-weight: 600; color: var(--accent);
+            white-space: nowrap; min-width: 32px; text-align: right;
+        }
+
+        /* ── TWO-COLUMN MOVE LOG ── */
+        .mlog-header { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 4px; }
         .mlog-header span {
-            font-size: .68rem;
-            text-transform: uppercase;
-            letter-spacing: .5px;
-            color: var(--text2);
-            background: var(--bg);
-            padding: 3px 6px;
-            border-radius: 4px;
-            text-align: center;
+            font-size: .68rem; text-transform: uppercase; letter-spacing: .5px;
+            color: var(--text2); background: var(--bg); padding: 3px 6px;
+            border-radius: 4px; text-align: center;
         }
-        .mlog-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2px;
-        }
+        .mlog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
         .mlog-cell {
-            font-size: .72rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: var(--bg);
-            min-height: 20px;
-            display: flex;
-            align-items: center;
-            color: var(--text2);
-            font-family: 'Consolas', monospace;
+            font-size: .72rem; padding: 2px 6px; border-radius: 4px; background: var(--bg);
+            min-height: 20px; display: flex; align-items: center;
+            color: var(--text2); font-family: 'Consolas', monospace;
         }
         .mlog-cell.p1c { border-left: 2px solid #f0d9b5; }
         .mlog-cell.p2c { border-left: 2px solid #555; }
         .mlog-cell.ai-c { border-left: 2px solid var(--accent); }
 
-        /* =================================================
-           TABLET  (601px – 900px)
-           Layout: board centred, panel + log go below
-           ================================================= */
+
+        /* =====================================================
+           TABLET  601px – 900px
+           Board top-full-width, panel + log side-by-side below
+           ===================================================== */
         @media (max-width: 900px) {
-            body {
-                padding: 12px;
-                align-items: flex-start;   /* don't try to centre vertically on short tablets */
-            }
+            body { padding: 12px; align-items: flex-start; }
 
-            .app {
-                flex-wrap: wrap;           /* let columns drop below */
-                gap: 14px;
-                justify-content: center;
-            }
+            .app { flex-wrap: wrap; gap: 12px; justify-content: center; }
 
-            /* Board section stays full width, centred */
             .board-section {
                 width: 100%;
-                max-width: 560px;
-                margin: 0 auto;
+                align-items: center;
             }
 
-            /* Board scales to available space */
             .board {
-                width: min(500px, 86vw);
-                height: min(500px, 86vw);
+                width: min(500px, 88vw);
+                height: min(500px, 88vw);
             }
+            .square, .piece { font-size: min(48px, 10.5vw); }
 
-            /* Piece font scales with board */
-            .square,
-            .piece { font-size: min(48px, 10.5vw); }
-
-            /* Panel and log side by side below the board */
+            /* Panel + log fill remaining width side-by-side */
             .panel {
-                width: calc(50% - 7px);
-                min-width: 220px;
-                max-width: 340px;
+                flex: 1 1 220px; min-width: 200px; max-width: 360px; width: auto;
             }
-
             .move-log-column {
-                width: calc(50% - 7px);
-                min-width: 200px;
-                max-width: 340px;
-                align-self: auto;
+                flex: 1 1 200px; min-width: 190px; max-width: 360px;
+                width: auto; align-self: auto;
             }
         }
 
-        /* =================================================
-           MOBILE  (≤ 600px)
-           Layout: single column, everything stacked
-           ================================================= */
+        /* =====================================================
+           MOBILE  ≤ 600px
+           Full single-column, board fills screen edge-to-edge
+           ===================================================== */
         @media (max-width: 600px) {
-            body {
-                padding: 8px;
-                align-items: flex-start;
-            }
+            body { padding: 8px; align-items: flex-start; }
 
             .app {
-                flex-direction: column;    /* single column */
+                flex-direction: column;
                 flex-wrap: nowrap;
-                align-items: center;
+                align-items: stretch;
                 gap: 10px;
+                width: 100%;
             }
 
-            /* Board section fills the screen width */
+            /* Board section: stretch to full page width */
             .board-section {
                 width: 100%;
+                align-items: stretch;
             }
 
-            /* Board: fill viewport minus body padding (16px total) */
-            .board {
-                width: calc(100vw - 68px);  /* 8px body pad × 2 + 14px board-container pad × 2 + 4px coords */
-                height: calc(100vw - 68px);
-            }
-
-            /* Scale pieces with the smaller board */
-            .square,
-            .piece { font-size: min(40px, 10.5vw); }
-
-            /* Score bars match board width */
-            .score-bar {
-                width: 100%;
-                padding: 6px 10px;
-            }
-
-            /* Board container snug padding on mobile */
+            /* Board container: full width, tighter padding */
             .board-container {
                 padding: 10px;
                 border-radius: 12px;
+                width: 100%;
             }
 
-            /* Panel full width */
+            /* Board: fill container width, stay square */
+            .board {
+                /* Available = 100vw - 8px body×2 - 10px pad×2 - 2px border = 100vw - 38px */
+                width: calc(100vw - 38px);
+                height: calc(100vw - 38px);
+            }
+
+            /* Pieces scale with board */
+            .square, .piece { font-size: calc((100vw - 38px) / 8 * 0.72); }
+
+            /* Score bars: stretch with board section */
+            .score-bar { border-radius: 8px; padding: 6px 10px; }
+
+            /* Panel: full width */
             .panel {
-                width: 100%;
-                max-width: 100%;
-                min-width: unset;
-                border-radius: 12px;
-                padding: 14px;
-                gap: 10px;
+                width: 100%; max-width: 100%; min-width: unset;
+                border-radius: 12px; padding: 14px; gap: 10px;
             }
 
-            /* Move log full width, fixed height so it doesn't grow forever */
+            /* Move log: full width */
             .move-log-column {
-                width: 100%;
-                max-width: 100%;
-                min-width: unset;
-                border-radius: 12px;
-                padding: 14px;
-                align-self: auto;
+                width: 100%; max-width: 100%; min-width: unset;
+                border-radius: 12px; padding: 14px; align-self: auto;
             }
 
-            .move-list,
-            #mlog {
-                max-height: 140px;
-            }
+            .move-list, #mlog { max-height: 140px; }
 
-            /* Tighten up buttons on small screens */
             .btn { padding: 9px 12px; font-size: .8rem; }
-
-            /* Game header: keep title + mode selector from overflowing */
-            .game-header {
-                flex-wrap: wrap;
-                gap: 6px;
-            }
-
-            /* Mode selector full width on very small screens */
-            .mode-sel { flex: 1; min-width: 0; }
+            .game-header { flex-wrap: wrap; gap: 6px; }
             .mode-sel button { padding: 7px 8px; font-size: .75rem; }
-
-            /* Shrink avatar images slightly */
             .avatar-img { width: 38px; height: 38px; font-size: 1.3rem; }
-
-            /* Prevent horizontal scroll */
-            html, body { overflow-x: hidden; }
         }
 
-        /* =================================================
-           VERY SMALL PHONES  (≤ 380px — e.g. iPhone SE)
-           ================================================= */
+        /* =====================================================
+           SMALL PHONES  ≤ 380px  (iPhone SE, Galaxy A03 etc.)
+           ===================================================== */
         @media (max-width: 380px) {
             body { padding: 6px; }
 
-            .board {
-                width: calc(100vw - 56px);
-                height: calc(100vw - 56px);
-            }
+            .board-container { padding: 8px; }
 
-            .square,
-            .piece { font-size: min(36px, 10vw); }
+            /* Recalculate: 100vw - 6px×2 body - 8px×2 pad - 2px border = 100vw - 30px */
+            .board {
+                width: calc(100vw - 30px);
+                height: calc(100vw - 30px);
+            }
+            .square, .piece { font-size: calc((100vw - 30px) / 8 * 0.72); }
 
             .panel, .move-log-column { padding: 10px; }
-
-            .game-header h2 { font-size: 1.1rem; }
+            .game-header h2 { font-size: 1.05rem; }
+            .avatar-img { width: 34px; height: 34px; font-size: 1.1rem; }
         }
