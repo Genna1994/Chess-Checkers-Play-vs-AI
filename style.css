@@ -13,83 +13,57 @@
             --valid-capture-ring: #e5383b;
             --board-border: #3b3b42;
         }
-
         #board.checkers .square.dark  { background: #4a7a59 !important; }
         #board.checkers .square.light { background: #c8dfc8 !important; }
         #board.checkers .square.last-from,
         #board.checkers .square.last-to,
         #board.chess .square.last-from,
         #board.chess .square.last-to { background: rgba(246,246,105,0.5) !important; }
-
         * { margin:0; padding:0; box-sizing:border-box; }
-
-        html, body { overflow-x: hidden; }
-
+        html { overflow-x: hidden; }
         body {
             background: var(--bg);
             font-family: 'Segoe UI', system-ui, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            color: var(--text);
-            user-select: none;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px; color: var(--text); user-select: none;
+            overflow-x: hidden;
         }
 
-        /* ── 3-column desktop layout ── */
+        /* ── Desktop: 3 columns ── */
         .app {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 20px;
-            justify-content: center;
-            align-items: flex-start;
-            max-width: 1260px;
-            width: 100%;
+            display: flex; flex-wrap: nowrap; gap: 20px;
+            justify-content: center; align-items: flex-start;
+            max-width: 1260px; width: 100%;
         }
 
-        /* ── Board section: column for score-bar / board-container / score-bar ── */
+        /* ── Board section ── */
         .board-section {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;   /* KEY: score bars stretch to match board-container width */
             gap: 6px;
-            /* Width matches board + padding + border exactly so score bars align */
-            width: fit-content;
             flex-shrink: 0;
         }
 
-        /* Score bars are tied to board width */
+        /* Score bars always exactly as wide as .board-section (= board-container) */
         .score-bar {
-            /* Same width as board-container below */
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--surface2);
-            border-radius: 10px;
-            padding: 7px 12px;
-            font-size: .8rem;
-            min-height: 40px;
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface2); border-radius: 10px;
+            padding: 7px 12px; font-size: .8rem; min-height: 40px;
+            /* width is inherited from board-section via align-items:stretch */
         }
 
         .board-container {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 14px;
-            box-shadow: 0 12px 30px rgba(0,0,0,.5);
-            border: 1px solid var(--board-border);
+            background: var(--surface); border-radius: 16px; padding: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,.5); border: 1px solid var(--board-border);
+            /* Width is driven by its content (board + coords) */
         }
 
-        /* Desktop board size */
+        /* The board itself */
         .board {
-            display: grid;
-            grid-template-columns: repeat(8,1fr);
-            grid-template-rows: repeat(8,1fr);
-            width: min(480px, 75vw);
-            height: min(480px, 75vw);
-            border-radius: 4px;
-            overflow: hidden;
+            display: grid; grid-template-columns: repeat(8,1fr); grid-template-rows: repeat(8,1fr);
+            width: min(480px, 72vw); height: min(480px, 72vw);
+            border-radius: 4px; overflow: hidden;
         }
 
         .board.flipped { transform: rotate(180deg); }
@@ -123,18 +97,16 @@
         }
         .piece.white {
             color: #f8f8f8;
-            text-shadow:
-                -2px -2px 0 #2a2a2a, 2px -2px 0 #2a2a2a,
-                -2px  2px 0 #2a2a2a, 2px  2px 0 #2a2a2a,
-                0px   0px 0 #2a2a2a, 0    3px  8px rgba(0,0,0,0.8);
+            text-shadow: -2px -2px 0 #2a2a2a, 2px -2px 0 #2a2a2a,
+                -2px 2px 0 #2a2a2a, 2px 2px 0 #2a2a2a,
+                0px 0px 0 #2a2a2a, 0 3px 8px rgba(0,0,0,0.8);
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
         }
         .piece.black {
             color: #2c2c2c;
-            text-shadow:
-                -1.5px -1.5px 0 #d8d8d8, 1.5px -1.5px 0 #d8d8d8,
-                -1.5px  1.5px 0 #d8d8d8, 1.5px  1.5px 0 #d8d8d8,
-                0       0px   0 #d8d8d8, 0      2px   5px rgba(0,0,0,0.6);
+            text-shadow: -1.5px -1.5px 0 #d8d8d8, 1.5px -1.5px 0 #d8d8d8,
+                -1.5px 1.5px 0 #d8d8d8, 1.5px 1.5px 0 #d8d8d8,
+                0 0px 0 #d8d8d8, 0 2px 5px rgba(0,0,0,0.6);
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
         }
 
@@ -154,12 +126,22 @@
 
         .coords { display: flex; justify-content: space-between; padding: 0 4px; font-size: .7rem; color: var(--text2); width: 100%; }
 
-        /* ── SIDE PANEL ── */
+        /* Wrapper for left-coords + board + right-coords */
+        .board-inner {
+            display: flex;
+            align-items: stretch;
+        }
+        .coords-side {
+            flex-direction: column;
+            justify-content: space-around;
+            width: 16px;
+            padding: 0;
+        }
+
+        /* ── Panel ── */
         .panel {
-            background: var(--surface); border-radius: 16px; padding: 20px;
-            border: 1px solid var(--board-border);
-            box-shadow: 0 12px 30px rgba(0,0,0,.5);
-            display: flex; flex-direction: column; gap: 14px;
+            background: var(--surface); border-radius: 16px; padding: 20px; border: 1px solid var(--board-border);
+            box-shadow: 0 12px 30px rgba(0,0,0,.5); display: flex; flex-direction: column; gap: 14px;
             width: 270px; max-width: 100%;
         }
         .game-header { display: flex; justify-content: space-between; align-items: center; }
@@ -178,10 +160,7 @@
         .diff-row label { font-size: .75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); }
         select { background: var(--surface2); border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; font-weight: 500; cursor: pointer; width: 100%; }
         .info-card { background: var(--surface2); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
-        .turn-badge {
-            font-weight: 600; padding: 6px 12px; border-radius: 20px; text-align: center;
-            font-size: .8rem; letter-spacing: .5px; transition: .3s;
-        }
+        .turn-badge { font-weight: 600; padding: 6px 12px; border-radius: 20px; text-align: center; font-size: .8rem; letter-spacing: .5px; transition: .3s; }
         .tw { background: #fff; color: #333; }
         .tb { background: #333; color: #eee; }
         .tr { background: #e94560; color: #fff; }
@@ -221,46 +200,25 @@
         .avatar-vs { font-size: .85rem; font-weight: 700; color: var(--text2); flex-shrink: 0; }
         .draw-info { font-size: .72rem; color: var(--text2); text-align: center; padding: 2px 0; min-height: 1em; }
 
-        /* ── MOVE LOG COLUMN ── */
+        /* ── Move log column ── */
         .move-log-column {
             background: var(--surface); border-radius: 16px; padding: 20px;
             border: 1px solid var(--board-border); box-shadow: 0 12px 30px rgba(0,0,0,.5);
             display: flex; flex-direction: column; gap: 10px;
-            width: 260px; min-width: 220px; max-width: 300px;
-            align-self: stretch;
+            width: 260px; min-width: 220px; max-width: 300px; align-self: stretch;
         }
-        .move-log-column h3 {
-            font-size: .75rem; text-transform: uppercase; letter-spacing: 1px;
-            color: var(--text2); margin-bottom: 2px;
-        }
+        .move-log-column h3 { font-size: .75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 2px; }
 
-        /* ── SCORE BAR INTERNALS ── */
-        .score-bar .sb-label {
-            font-weight: 700; font-size: .75rem; letter-spacing: .5px;
-            color: var(--text2); white-space: nowrap; min-width: 56px;
-        }
-        .score-bar .sb-caps {
-            display: flex; flex-wrap: wrap; gap: 2px;
-            flex: 1; min-height: 20px; align-items: center;
-        }
-        .score-bar .sb-score {
-            font-size: .78rem; font-weight: 600; color: var(--accent);
-            white-space: nowrap; min-width: 32px; text-align: right;
-        }
+        /* Score bar internals */
+        .score-bar .sb-label { font-weight: 700; font-size: .75rem; letter-spacing: .5px; color: var(--text2); white-space: nowrap; min-width: 56px; }
+        .score-bar .sb-caps { display: flex; flex-wrap: wrap; gap: 2px; flex: 1; min-height: 20px; align-items: center; }
+        .score-bar .sb-score { font-size: .78rem; font-weight: 600; color: var(--accent); white-space: nowrap; min-width: 32px; text-align: right; }
 
-        /* ── TWO-COLUMN MOVE LOG ── */
+        /* Move log grid */
         .mlog-header { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 4px; }
-        .mlog-header span {
-            font-size: .68rem; text-transform: uppercase; letter-spacing: .5px;
-            color: var(--text2); background: var(--bg); padding: 3px 6px;
-            border-radius: 4px; text-align: center;
-        }
+        .mlog-header span { font-size: .68rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text2); background: var(--bg); padding: 3px 6px; border-radius: 4px; text-align: center; }
         .mlog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
-        .mlog-cell {
-            font-size: .72rem; padding: 2px 6px; border-radius: 4px; background: var(--bg);
-            min-height: 20px; display: flex; align-items: center;
-            color: var(--text2); font-family: 'Consolas', monospace;
-        }
+        .mlog-cell { font-size: .72rem; padding: 2px 6px; border-radius: 4px; background: var(--bg); min-height: 20px; display: flex; align-items: center; color: var(--text2); font-family: 'Consolas', monospace; }
         .mlog-cell.p1c { border-left: 2px solid #f0d9b5; }
         .mlog-cell.p2c { border-left: 2px solid #555; }
         .mlog-cell.ai-c { border-left: 2px solid var(--accent); }
@@ -268,37 +226,29 @@
 
         /* =====================================================
            TABLET  601px – 900px
-           Board top-full-width, panel + log side-by-side below
            ===================================================== */
         @media (max-width: 900px) {
             body { padding: 12px; align-items: flex-start; }
-
             .app { flex-wrap: wrap; gap: 12px; justify-content: center; }
 
-            .board-section {
-                width: 100%;
-                align-items: center;
-            }
+            .board-section { width: 100%; }
 
-            .board {
-                width: min(500px, 88vw);
-                height: min(500px, 88vw);
-            }
-            .square, .piece { font-size: min(48px, 10.5vw); }
+            .board { width: min(500px, 86vw); height: min(500px, 86vw); }
+            .square, .piece { font-size: min(48px, 10vw); }
 
-            /* Panel + log fill remaining width side-by-side */
-            .panel {
-                flex: 1 1 220px; min-width: 200px; max-width: 360px; width: auto;
-            }
-            .move-log-column {
-                flex: 1 1 200px; min-width: 190px; max-width: 360px;
-                width: auto; align-self: auto;
-            }
+            .panel { flex: 1 1 220px; min-width: 200px; max-width: 360px; width: auto; }
+            .move-log-column { flex: 1 1 200px; min-width: 190px; max-width: 360px; width: auto; align-self: auto; }
         }
 
         /* =====================================================
-           MOBILE  ≤ 600px
-           Full single-column, board fills screen edge-to-edge
+           MOBILE  ≤ 600px  — single column, board fills screen
+           =====================================================
+           Board total rendered width on screen:
+             body padding-left (8) + board-container border (1) + board-container pad (10)
+             + coords-left (16) + BOARD + coords-right (16)
+             + board-container pad (10) + board-container border (1) + body padding-right (8)
+             = 70px overhead
+           So board width = 100vw - 70px
            ===================================================== */
         @media (max-width: 600px) {
             body { padding: 8px; align-items: flex-start; }
@@ -309,48 +259,44 @@
                 align-items: stretch;
                 gap: 10px;
                 width: 100%;
+                max-width: 100%;
             }
 
-            /* Board section: stretch to full page width */
             .board-section {
                 width: 100%;
-                align-items: stretch;
+                /* align-items stays stretch from base style —
+                   score-bars will match board-container width */
             }
 
-            /* Board container: full width, tighter padding */
             .board-container {
                 padding: 10px;
                 border-radius: 12px;
-                width: 100%;
+                /* Let it size to content (board + coords) */
             }
 
-            /* Board: fill container width, stay square */
+            /* Board = viewport minus all surrounding chrome */
             .board {
-                /* Available = 100vw - 8px body×2 - 10px pad×2 - 2px border = 100vw - 38px */
-                width: calc(100vw - 38px);
-                height: calc(100vw - 38px);
+                width: calc(100vw - 70px);
+                height: calc(100vw - 70px);
             }
 
-            /* Pieces scale with board */
-            .square, .piece { font-size: calc((100vw - 38px) / 8 * 0.72); }
+            .square, .piece {
+                /* Each square = board-width / 8 */
+                font-size: calc((100vw - 70px) / 8 * 0.72);
+            }
 
-            /* Score bars: stretch with board section */
             .score-bar { border-radius: 8px; padding: 6px 10px; }
+            .board-inner { width: 100%; }
 
-            /* Panel: full width */
             .panel {
                 width: 100%; max-width: 100%; min-width: unset;
                 border-radius: 12px; padding: 14px; gap: 10px;
             }
-
-            /* Move log: full width */
             .move-log-column {
                 width: 100%; max-width: 100%; min-width: unset;
                 border-radius: 12px; padding: 14px; align-self: auto;
             }
-
             .move-list, #mlog { max-height: 140px; }
-
             .btn { padding: 9px 12px; font-size: .8rem; }
             .game-header { flex-wrap: wrap; gap: 6px; }
             .mode-sel button { padding: 7px 8px; font-size: .75rem; }
@@ -358,19 +304,18 @@
         }
 
         /* =====================================================
-           SMALL PHONES  ≤ 380px  (iPhone SE, Galaxy A03 etc.)
+           SMALL PHONES  ≤ 380px
+           Same math: 100vw - 6px×2 body - 8px×2 pad - 2px border - 32px coords = 100vw - 62px
            ===================================================== */
         @media (max-width: 380px) {
             body { padding: 6px; }
-
             .board-container { padding: 8px; }
 
-            /* Recalculate: 100vw - 6px×2 body - 8px×2 pad - 2px border = 100vw - 30px */
             .board {
-                width: calc(100vw - 30px);
-                height: calc(100vw - 30px);
+                width: calc(100vw - 62px);
+                height: calc(100vw - 62px);
             }
-            .square, .piece { font-size: calc((100vw - 30px) / 8 * 0.72); }
+            .square, .piece { font-size: calc((100vw - 62px) / 8 * 0.72); }
 
             .panel, .move-log-column { padding: 10px; }
             .game-header h2 { font-size: 1.05rem; }
